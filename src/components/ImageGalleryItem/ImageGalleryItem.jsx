@@ -33,11 +33,7 @@ export class ImageGalleryItem extends Component {
 
 export default ImageGalleryItem;
 ImageGalleryItem.propTypes = {
-  photos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      webformatURL: PropTypes.string.isRequired,
-      largeImageURL: PropTypes.string.isRequired,
-    })
-  ),
+  id: PropTypes.number.isRequired,
+  webformatURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
 };
