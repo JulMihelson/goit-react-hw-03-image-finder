@@ -1,10 +1,43 @@
-// import css from './ImageGalleryItem.modal.css';
+import React, { Component } from 'react';
+import css from './ImageGalleryItem.modal.css';
+import { Modal } from 'components/Modal';
+import PropTypes from 'prop-types';
 
-// export const ImageGalleryItem = (array) => {
-//     array.map(item, id) => {
-//      return (
-//          <li key={item.id} className={css.galleryItem}>
-//          <img src={item.webformatURL} alt={item.id} />
-//     </li>
-//   );
-// }};
+export class ImageGalleryItem extends Component {
+  state = {
+    modalIsOpen: false,
+  };
+  handleOnClick = () => {
+    this.setState(prev => ({ modalIsOpen: !prev.modalIsOpen }));
+  };
+  render() {
+    return (
+      <>
+        <li className={css.galleryItem}>
+          <img
+            onClick={this.handleOnClick}
+            src={this.props.webformatURL}
+            alt={this.props.id}
+          />
+        </li>
+        {this.state.modalIsOpen && (
+          <Modal
+            handleOnClick={this.handleOnClick}
+            largeImageURL={this.props.largeImageURL}
+          />
+        )}
+      </>
+    );
+  }
+}
+
+export default ImageGalleryItem;
+ImageGalleryItem.propTypes = {
+  photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    })
+  ),
+};

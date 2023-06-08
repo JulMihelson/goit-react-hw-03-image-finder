@@ -1,21 +1,35 @@
 import { Component } from 'react';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+import PropTypes from 'prop-types';
 // import axios from 'axios';
 
 export class ImageGallery extends Component {
   state = { gallery: null };
 
   render() {
-    const { gallery } = this.state;
+    const { photos } = this.props;
     return (
       <>
-        <ul className="gallery">
-          {gallery &&
-            gallery.hits.map(item => (
-              <ImageGalleryItem key={item.id} item={item} />
-            ))}
+        <ul>
+          {photos.map(item => (
+            <ImageGalleryItem
+              key={item.id}
+              id={item.id}
+              webformatURL={item.webformatURL}
+              largeImageURL={item.largeImageURL}
+            />
+          ))}
         </ul>
       </>
     );
   }
 }
+ImageGallery.propTypes = {
+  photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    })
+  ),
+};

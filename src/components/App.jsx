@@ -3,15 +3,40 @@ import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery';
 import { Component } from 'react';
 import { getPictures } from './Api';
+import { Button } from './Button';
+import { Loader } from './Loader';
 export class App extends Component {
   state = {
     query: '',
     page: 1,
+    photos: [],
+    showBtn: false,
+    loading: false,
   };
-  componentDidUpdate(prevProps, prevState) {
+
+  onLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
+  componentDidUpdate(_, prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
-      getPictures(query, page);
+      this.setState({ loading: true });
+      getPictures(query, page)
+        .then(({ hits, totalHits }) => {
+          if (!hits.length) {
+            console.log('No images were found');
+            return;
+          }
+          const isLastPage = Math.ceil(totalHits / 12) === page;
+
+          this.setState(prevState => ({
+            showBtn: !isLastPage,
+            photos: [...prevState.photos, ...hits],
+          }));
+        })
+        .catch(error => console.log(error.message))
+        .finally(() => this.setState({ loading: false }));
     }
   }
   onSubmit = query => {
@@ -29,8 +54,10 @@ export class App extends Component {
           color: '#010101',
         }}
       >
-        <SearchBar />
-        <ImageGallery />
+        <SearchBar onSubmit={this.onSubmit} />
+        <ImageGallery photos={this.state.photos} />
+        {this.state.showBtn && <Button onNextPage={this.onLoadMore} />}
+        {this.state.loading && <Loader />}
       </div>
     );
   }
