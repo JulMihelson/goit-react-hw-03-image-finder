@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 // import axios from 'axios';
 
 export class ImageGallery extends Component {
-  state = { gallery: null };
-
   render() {
     const { photos } = this.props;
     return (

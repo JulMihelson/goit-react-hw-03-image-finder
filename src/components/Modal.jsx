@@ -26,5 +26,6 @@ export class Modal extends Component {
   }
 }
 Modal.propTypes = {
-  currentClick: PropTypes.func.isRequired,
+  handleOnClick: PropTypes.func.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
 };
